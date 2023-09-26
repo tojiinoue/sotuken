@@ -43,6 +43,7 @@ function User_card(props) {
         console.log(props.state);
         console.log(props.user_name);
         console.log(props.icons);
+        console.log(props.rank);
         Setstate(props.state);
     }, []);
 

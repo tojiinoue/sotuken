@@ -15,7 +15,6 @@ function List_quiz_top(props) {
     const now_numRef = useRef(0); //保存
     //クイズの総数
     const [quiz_sum, Set_quiz_sum] = useState(null); //保存
-    const [user_address, SetUser_address] = useState(null);
 
     //表示するクイズのリスト
     const [quiz_list, Set_quiz_list] = useState([]); //保存
@@ -36,14 +35,9 @@ function List_quiz_top(props) {
         });
     };
 
-    async function User_address() {
-        SetUser_address(await cont.get_address());
-    }
-
     useEffect(() => {
         cont.get_quiz_lenght().then((data) => {
             // Promise オブジェクトが解決された後の処理を記述
-            User_address();
             console.log(Number(data));
             let now = parseInt(Number(data));
             Set_quiz_sum(now);
@@ -68,9 +62,6 @@ function List_quiz_top(props) {
                 <div ref={targetRef}>
                     {/* ターゲット要素aの内容 */}
                     now_loading
-                </div>
-                <div>
-                    {user_address}
                 </div>
             </>
         );
