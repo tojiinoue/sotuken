@@ -82,9 +82,14 @@ function Time_diff(props) {
 function Simple_quiz(props) {
     const [show, setShow] = useState(false);
     const [isreward, setIsreward] = useState(true);
+    const [ispayment, setIspayment] = useState(false);
     useEffect(() => {
         console.log("show", show);
-        if(Number(props.quiz[7]) == 0){
+        if (Number(props.quiz[7]) == 0) {
+            setIsreward(false);
+        }
+        if (props.quiz[11]) {
+            setIspayment(true);
             setIsreward(false);
         }
     }, [show]);
@@ -96,7 +101,7 @@ function Simple_quiz(props) {
         <>
             {/* <Modal show={show} setShow={setShow} id={props.quiz[0].toNumber()} /> */}
             <div onClick={() => setShow(true)}>
-                <div className={`quiz_card ${isreward == true ?  'border border-primary' : '' }`}>
+                <div className={`quiz_card ${ispayment == true ? 'border border-danger ' : ''} ${isreward == true ? 'border border-primary' : ''}`}>
                     <Link to={{ pathname: "/answer_quiz/" + Number(props.quiz[0]), state: { back_page: 0 } }} style={{ color: "black", textDecoration: "none" }}>
                         <div className="row quiz_card_1">
                             <div className="col-2">
