@@ -37,7 +37,7 @@ function View_result(props) {
     const [csvdownloader, setCsvdownloader] = useState(false);
 
     const handle_export_csv = () => {
-        console.log(data_for_survey_users);
+        //console.log(data_for_survey_users);
 
         const users_data = [
             Object.keys(data_for_survey_users[0])
