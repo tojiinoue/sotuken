@@ -51,7 +51,7 @@ function Create_quiz() {
 
         if (correct !== "") {
             console.log(new Date(reply_startline).getTime(), new Date(reply_deadline).getTime());
-            if (new Date(reply_startline).getTime() <= new Date(reply_deadline).getTime()) {
+            if (Math.floor(new Date(reply_startline).getTime() / 1000) <= Math.floor(new Date(reply_deadline).getTime() / 1000)) {
                 Contract.create_quiz(title, explanation, thumbnail_url, content, answer_type, answer_data, convertFullWidthNumbersToHalf(correct), reply_startline, reply_deadline, reward, correct_limit, setShow);
             } else {
                 alert("回答開始日時を回答締切日時より前に設定してください");
@@ -99,7 +99,7 @@ function Create_quiz() {
         // const diff_time = new Date(now + 100);
         // setReply_deadline(addDays(now, 5));
         async function get_contract() {
-            setCorrect_limit(await Contract.get_num_of_students());
+            setCorrect_limit((await Contract.get_num_of_students()) + 30);
         }
         get_contract();
         setnow(getLocalizedDateTimeString());
