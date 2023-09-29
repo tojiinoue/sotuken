@@ -29,7 +29,7 @@ function Investment_to_quiz() {
     };
 
     async function get_contract() {
-        setNumOfStudent(await Contract.get_num_of_students());
+        setNumOfStudent((await Contract.get_num_of_students()) + 30);
     }
 
     async function is_teacher() {
