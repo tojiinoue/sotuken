@@ -63,7 +63,7 @@ function Investment_to_quiz() {
 
     if (isteacher) {
         return (
-            <div className="col">
+            <div className="col mb-5">
                 <div className="row justify-content-center">
                     <div className="col-10">
                         このテストのIDは{id}です
