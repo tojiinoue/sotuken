@@ -51,11 +51,7 @@ function Create_quiz() {
 
         if (correct !== "") {
             console.log(new Date(reply_startline).getTime(), new Date(reply_deadline).getTime());
-            if (Math.floor(new Date(reply_startline).getTime() / 1000) <= Math.floor(new Date(reply_deadline).getTime() / 1000)) {
-                Contract.create_quiz(title, explanation, thumbnail_url, content, answer_type, answer_data, convertFullWidthNumbersToHalf(correct), reply_startline, reply_deadline, reward, correct_limit, setShow);
-            } else {
-                alert("回答開始日時を回答締切日時より前に設定してください");
-            }
+            Contract.create_quiz(title, explanation, thumbnail_url, content, answer_type, answer_data, convertFullWidthNumbersToHalf(correct), reply_startline, reply_deadline, reward, correct_limit, setShow);
         } else {
             alert("正解を入力してください");
         }
