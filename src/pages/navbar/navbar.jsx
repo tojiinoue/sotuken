@@ -17,20 +17,17 @@ import Modal_change_network from "./Modal_change_network";
 
 function create_edit_button(prop) {
     return (
-        <div>
-            <div className="col-1"></div>
-            <div className="col-3">
-                <Nav.Item>
-                    <Nav.Link eventKey="edit" href={prop + "/edit_list"}>
-                        <div className="col-12">
-                            <RiFileSettingsLine size={30} />
-                        </div>
-                        <div className="col-12 d-flex justify-content-center align-items-center">
-                            <font size="2">テストの編集</font>
-                        </div>
-                    </Nav.Link>
-                </Nav.Item>
-            </div>
+        <div className="col-3">
+            <Nav.Item>
+                <Nav.Link eventKey="edit" href={prop + "/edit_list"}>
+                    <div className="col-12">
+                        <RiFileSettingsLine size={30} />
+                    </div>
+                    <div className="col-12 d-flex justify-content-center align-items-center">
+                        <font size="2">テストの編集</font>
+                    </div>
+                </Nav.Link>
+            </Nav.Item>
         </div>
     );
 }
@@ -64,7 +61,7 @@ function Nav_menu(props) {
                         alignItems: "center",
                     }}
                 >
-                    <div className="row justify-content-center">
+                    <div className="row justify-content-bitween">
                         <div className="col-3">
                             <Nav.Item>
                                 <Nav.Link eventKey="list_quiz" href={props.home + "/list_quiz"}>
@@ -77,7 +74,7 @@ function Nav_menu(props) {
                                 </Nav.Link>
                             </Nav.Item>
                         </div>
-                        <div className="col-1"></div>
+                        {/*<div className="col-1"></div>*/}
                         <div className="col-3">
                             <Nav.Item>
                                 <Nav.Link eventKey="create_quiz" href={props.home + "/create_quiz"}>
@@ -90,7 +87,7 @@ function Nav_menu(props) {
                                 </Nav.Link>
                             </Nav.Item>
                         </div>
-                        <div className="col-1"></div>
+                        {/*<div className="col-1"></div>*/}
                         <div className="col-3">
                             <Nav.Item>
                                 <Nav.Link eventKey="user_page" href={props.home + "/user_page/" + useing_address}>
