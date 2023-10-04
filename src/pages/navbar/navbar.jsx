@@ -15,6 +15,12 @@ import { AiFillHome, AiFillSetting, AiFillStar } from "react-icons/ai";
 import { Contracts_MetaMask } from "../../contract/contracts";
 import Modal_change_network from "./Modal_change_network";
 
+function create_col1() {
+    return (
+        <div className="col-1"></div>
+    );
+}
+
 function create_edit_button(prop) {
     return (
         <div className="col-3">
@@ -74,7 +80,7 @@ function Nav_menu(props) {
                                 </Nav.Link>
                             </Nav.Item>
                         </div>
-                        {/*<div className="col-1"></div>*/}
+                        {!isTeacher ? create_col1() : ""}
                         <div className="col-3">
                             <Nav.Item>
                                 <Nav.Link eventKey="create_quiz" href={props.home + "/create_quiz"}>
@@ -87,7 +93,7 @@ function Nav_menu(props) {
                                 </Nav.Link>
                             </Nav.Item>
                         </div>
-                        {/*<div className="col-1"></div>*/}
+                        {!isTeacher ? create_col1() : ""}
                         <div className="col-3">
                             <Nav.Item>
                                 <Nav.Link eventKey="user_page" href={props.home + "/user_page/" + useing_address}>
