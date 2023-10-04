@@ -47,7 +47,7 @@ function Create_quiz() {
     })();
 
     const create_quiz = async () => {
-        console.log(title, explanation, thumbnail_url, content, answer_data, correct, reply_startline, reply_deadline, reward, correct_limit);
+        //console.log(title, explanation, thumbnail_url, content, answer_data, correct, reply_startline, reply_deadline, reward, correct_limit);
 
         if (correct !== "") {
             console.log(new Date(reply_startline).getTime(), new Date(reply_deadline).getTime());
