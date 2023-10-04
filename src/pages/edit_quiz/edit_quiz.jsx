@@ -111,7 +111,7 @@ function Edit_quiz() {
     if (isteacher) {
         return (
             <div>
-                <div className="row">
+                <div className="row mb-5">
                     <div className="col-2" />
                     <div className="col-8">
                         <Form>
