@@ -366,7 +366,6 @@ class Contracts_MetaMask {
                     if (hash) {
                         res = await publicClient.waitForTransactionReceipt({ hash });
                         hash = await this._create_quiz(account, title, explanation, thumbnail_url, content, answer_type, answer_data, correct, reply_startline, reply_deadline, reward, correct_limit);
-                        console.log(hash);
                         if (hash) {
                             res = await publicClient.waitForTransactionReceipt({ hash });
                         }
