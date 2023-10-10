@@ -1,10 +1,10 @@
 import Form from "react-bootstrap/Form";
-import {useState, useEffect, useRef} from "react";
-import MDEditor, {selectWord} from "@uiw/react-md-editor";
-import {resolvePath, useLocation} from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import MDEditor, { selectWord } from "@uiw/react-md-editor";
+import { resolvePath, useLocation } from "react-router-dom";
 import Simple_quiz from "./quiz_simple";
 
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 function Quiz_list(props) {
     const location = useLocation();
     //画面を満たす個数を計算して、add_numに代入
@@ -67,7 +67,7 @@ function Quiz_list(props) {
     }, options);
 
     useEffect(() => {
-        console.log(location.search);
+        //console.log(location.search);
 
         const targetElement = props.targetRef.current; // ターゲット要素を取得
         if (targetElement) {
