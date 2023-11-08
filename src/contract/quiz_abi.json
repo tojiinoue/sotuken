@@ -295,6 +295,11 @@
           "internalType": "string",
           "name": "_answer",
           "type": "string"
+        },
+        {
+          "internalType": "address[]",
+          "name": "students",
+          "type": "address[]"
         }
       ],
       "name": "payment_of_reward",

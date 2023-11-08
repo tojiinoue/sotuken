@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import { useLocation } from "react-router-dom";
 import { Contracts_MetaMask } from "../../contract/contracts";
@@ -13,6 +13,7 @@ function Investment_to_quiz() {
     const [answer, setAnswer] = useState("");
     const [isteacher, setisteacher] = useState(null);
     const [isNotAddingReward, setIsNotAddingReward] = useState("true");
+    const [students, setStudents] = useState(null);
 
     let Contract = new Contracts_MetaMask();
 
@@ -35,6 +36,9 @@ function Investment_to_quiz() {
     async function is_teacher() {
         setisteacher(await Contract.isTeacher());
     }
+    async function get_students() {
+        setStudents(await Contract.get_student_list());
+    }
 
     get_contract();
     is_teacher();
@@ -52,13 +56,18 @@ function Investment_to_quiz() {
 
     const investment_to_quiz = async () => {
         if ((answer == "" && isNotPayingOut == "false") == false) {
-            Contract.investment_to_quiz(id, amount, convertFullWidthNumbersToHalf(answer), isNotPayingOut, numOfStudent, isNotAddingReward);
+            Contract.investment_to_quiz(id, amount, convertFullWidthNumbersToHalf(answer), isNotPayingOut, numOfStudent, isNotAddingReward, students);
         } else {
             alert("答えを入力してください");
         }
     };
+    useEffect(() => {
+        get_students();
+    }, []);
 
     console.log(isNotPayingOut);
+    console.log(students);
+
 
 
     if (isteacher) {
