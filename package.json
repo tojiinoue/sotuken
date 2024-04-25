@@ -41,7 +41,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "postbuild": "copy build/index.html build/404.html",
+    "postbuild": "cp build/index.html build/404.html",
     "start": "react-scripts start",
     "build": "react-scripts build  GENERATE_SOURCEMAP=false",
     "test": "react-scripts test",
