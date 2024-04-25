@@ -1,6 +1,6 @@
 {
-  "homepage": "https://tojiinoue.github.io/sotuken-web3-2",
-  "name": "sotuken-web3-2",
+  "homepage": "https://tojiinoue.github.io/sotuken-web3",
+  "name": "sotuken-web3",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
