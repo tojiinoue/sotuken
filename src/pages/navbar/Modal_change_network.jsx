@@ -4,7 +4,7 @@ const Modal_change_network = (props) => {
     if (props.chain_id) {
         return (
             <>
-                {props.chain_id != 8995 ? ( // showFlagがtrueだったらModalを表示する
+                {props.chain_id != 80002 ? ( // showFlagがtrueだったらModalを表示する
                     <div id="overlay" class="stars" style={{}}>
                         <div
                             id="modalContent"

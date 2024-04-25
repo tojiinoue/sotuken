@@ -2,18 +2,18 @@ import { createPublicClient, createWalletClient, http, getContract, parseAbiItem
 import token_contract from "./token_abi.json";
 import quiz_contract from "./quiz_abi.json";
 import { chainId, rpc, quiz_address, token_address } from "./config";
-import { berg } from "./network";
+import { amoy } from "./network";
 
 const { ethereum } = window;
 const homeUrl = process.env.PUBLIC_URL;
 
 const walletClient = createWalletClient({
-    chain: berg,
+    chain: amoy,
     transport: custom(window.ethereum),
 });
 
 const publicClient = createPublicClient({
-    chain: berg,
+    chain: amoy,
     transport: http(),
 });
 
@@ -69,7 +69,7 @@ class Contracts_MetaMask {
                 type: "ERC20",
                 options: {
                     address: token_address,
-                    symbol: "Wake",
+                    symbol: "Trial",
                     decimals: 18,
                 },
             },
@@ -78,7 +78,7 @@ class Contracts_MetaMask {
 
     async change_network() {
         try {
-            await walletClient.switchChain({ id: berg.id });
+            await walletClient.switchChain({ id: amoy.id });
         } catch (e) {
             //userがrejectした場合
             if (e.code === 4001) {
@@ -90,7 +90,7 @@ class Contracts_MetaMask {
     }
     async add_network() {
         try {
-            await walletClient.addChain({ chain: berg });
+            await walletClient.addChain({ chain: amoy });
         } catch (e) {
             console.log(e);
         }
