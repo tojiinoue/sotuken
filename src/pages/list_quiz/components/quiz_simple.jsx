@@ -123,7 +123,7 @@ function Simple_quiz(props) {
                                     <div className="col-3">
                                         <div className="col">報酬</div>
                                         <div className="col" style={{ textAlign: "center" }}>
-                                            {Number(props.quiz[7]) / (10 ** 18)}Wake
+                                            {Number(props.quiz[7]) / (10 ** 18)}FLT
                                         </div>
                                     </div>
                                     <div className="col-3">
