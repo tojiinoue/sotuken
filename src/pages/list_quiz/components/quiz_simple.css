@@ -25,3 +25,7 @@
 .border {
   border: 1px solid red;
 }
+
+.bg-blue {
+  background-color: blue;
+}
