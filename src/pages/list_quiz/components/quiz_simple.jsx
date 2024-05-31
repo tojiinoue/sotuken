@@ -97,7 +97,7 @@ function Simple_quiz(props) {
     console.log(isreward)
     const search = useLocation().search;
     console.log(props.quiz);
-    const cardBackgroundClass = Number(props.quiz[10]) == 0 ? 'bg-blue' : '';//状態による背景変更（井上）
+    const cardStatusClass = Number(props.quiz[10]) == 0 ? 'bg-blue' : '';//状態による背景変更（井上）
     return (
         <>
             {/* <Modal show={show} setShow={setShow} id={props.quiz[0].toNumber()} /> */}
