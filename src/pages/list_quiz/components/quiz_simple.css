@@ -28,5 +28,5 @@
 }
 
 .bg-blue {
-  background: blue;
+  background: hsl(200, 100%, 80%);
 }

@@ -102,7 +102,7 @@ function Simple_quiz(props) {
         <>
             {/* <Modal show={show} setShow={setShow} id={props.quiz[0].toNumber()} /> */}
             <div onClick={() => setShow(true)}>
-                <div className={`quiz_card ${cardStatusClass} ${ispayment == true ? 'border border-danger ' : ''} ${isreward == true ? 'border border-primary' : ''}`}>
+                <div className={`quiz_card ${cardStatusClass ==true ? 'bg-blue' : ''} ${ispayment == true ? 'border border-danger ' : ''} ${isreward == true ? 'border border-primary' : ''}`}>
                     <Link to={{ pathname: "/answer_quiz/" + Number(props.quiz[0]), state: { back_page: 0 } }} style={{ color: "black", textDecoration: "none" }}>
                         <div className="row quiz_card_1">
                             <div className="col-2">
