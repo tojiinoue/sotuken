@@ -1,3 +1,7 @@
+.bg-blue {
+  background: #add8e6; /* 薄い青 */
+}
+
 @media screen and (max-width: 600px) {
   .quiz_card {
     /*background: #d9d9d9;
@@ -27,6 +31,3 @@
   border: 1px solid red;
 }
 
-.bg-blue {
-  background: #add8e6; /* 薄い青 */
-}
