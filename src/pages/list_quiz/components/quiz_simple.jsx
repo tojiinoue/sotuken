@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { useLocation } from "react-router-dom";
 import Modal from "./Modal";
 import { Link } from "react-router-dom";
@@ -84,7 +83,7 @@ function Simple_quiz(props) {
     const [isreward, setIsreward] = useState(true);
     const [ispayment, setIspayment] = useState(false);
     useEffect(() => {
-        console.log("show", show);
+        /*console.log("show", show);*///消した
         if (Number(props.quiz[7]) == 0) {
             setIsreward(false);
         }
@@ -92,17 +91,17 @@ function Simple_quiz(props) {
             setIspayment(true);
             setIsreward(false);
         }
-    }, [show]);
-    console.log(Number(props.quiz[7]));
-    console.log(isreward)
+    }, []);//[show]→[]に変更
+    /*console.log(Number(props.quiz[7]));
+    console.log(isreward)*///消した
     const search = useLocation().search;
     console.log(props.quiz);
-    const cardStatusClass = Number(props.quiz[10]) == 0 ? 'bg-blue' : '';//状態による背景変更（井上）
+    const cardStatusClass = Number(props.quiz[10]) === 0 ? 'bg-blue' : '';
     return (
         <>
             {/* <Modal show={show} setShow={setShow} id={props.quiz[0].toNumber()} /> */}
             <div onClick={() => setShow(true)}>
-                <div className={`quiz_card ${cardStatusClass ==true ? 'bg-blue' : ''} ${ispayment == true ? 'border border-danger ' : ''} ${isreward == true ? 'border border-primary' : ''}`}>
+                <div className={`quiz_card ${cardStatusClass} ${ispayment == true ? 'border border-danger ' : ''} ${isreward == true ? 'border border-primary' : ''}`}>
                     <Link to={{ pathname: "/answer_quiz/" + Number(props.quiz[0]), state: { back_page: 0 } }} style={{ color: "black", textDecoration: "none" }}>
                         <div className="row quiz_card_1">
                             <div className="col-2">
