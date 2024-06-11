@@ -94,9 +94,9 @@ function Simple_quiz(props) {
     }, []);//[show]→[]に変更
     /*console.log(Number(props.quiz[7]));
     console.log(isreward)*///消した
+    const cardStatusClass = Number(props.quiz[10]) === 0 ? 'bg-blue' : '';//追加した
     const search = useLocation().search;
-    console.log(props.quiz);
-    const cardStatusClass = Number(props.quiz[10]) === 0 ? 'bg-blue' : '';
+    /*console.log(props.quiz);*///消した
     return (
         <>
             {/* <Modal show={show} setShow={setShow} id={props.quiz[0].toNumber()} /> */}
