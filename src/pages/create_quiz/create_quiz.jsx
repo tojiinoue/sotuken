@@ -121,9 +121,10 @@ function Create_quiz() {
 
     useEffect(() => {
         async function get_contract() {
+            const correctLimit = (await Contract.get_num_of_students()) + 30;
             setQuizzes(quizzes.map(quiz => ({
                 ...quiz,
-                correct_limit: (await Contract.get_num_of_students()) + 30
+                correct_limit: correctLimit
             })));
         }
         get_contract();
@@ -184,7 +185,7 @@ function Create_quiz() {
                         </div>
                     ))}
                     <div style={{ textAlign: "right" }}>
-                        <Button variant="primary" onClick={addQuiz} style={{ marginRight: "10px" }}>
+                        <Button variant="primary" onClick={addQuiz} style={{ marginRight: "20px" }}>
                             クイズを追加
                         </Button>
                         <Button variant="primary" onClick={create_quiz} style={{ marginTop: "20px" }}>
@@ -199,4 +200,4 @@ function Create_quiz() {
     );
 }
 
-export default Create_quiz
+export default Create_quiz;
