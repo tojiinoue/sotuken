@@ -11,57 +11,53 @@ const { ethereum } = window;
 const mkdStr = "";
 
 function Create_quiz() {
-    const [quizzes, setQuizzes] = useState([
-        {
-            title: "",
-            explanation: "",
-            thumbnail_url: "",
-            content: "",
-            answer_type: 0,
-            answer_data: [],
-            correct: "",
-            reply_startline: new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).replace(/[/]/g, "-").replace(/\s(\d):/, " 0$1:"),
-            reply_deadline: getLocalizedDateTimeString(addDays(new Date(), 1)),
-            reward: 0,
-            correct_limit: null,
-        }
-    ]);
+    const [useing_address, Set_useing_address] = useState(null);
+    const [title, setTitle] = useState("");
+    const [explanation, setExplanation] = useState("");
+    const [thumbnail_url, setThumbnail_url] = useState("");
+    const [content, setContent] = useState("");
+    const [answer_type, setAnswer_type] = useState(0);
+    const [answer_data, setAnswer_data] = useState([]);
+    const [correct, setCorrect] = useState("");
+    const [reply_startline, setReply_startline] = useState(
+        new Date()
+            .toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+            .replace(/[/]/g, "-")
+            .replace(/\s(\d):/, " 0$1:"),
+    );
+    const [reply_deadline, setReply_deadline] = useState(getLocalizedDateTimeString(addDays(new Date(), 1)));
+    const [reward, setReward] = useState(0);
+
+    let Contract = new Contracts_MetaMask();
+
+    const [correct_limit, setCorrect_limit] = useState(null);
     const [state, setState] = useState("Null");
     const [now, setnow] = useState(null);
     const [show, setShow] = useState(false);
 
-    let Contract = new Contracts_MetaMask();
-
     const convertFullWidthNumbersToHalf = (() => {
+        // 全角数字と半角数字の差分を計算
         const diff = "０".charCodeAt(0) - "0".charCodeAt(0);
+
+        // 置換関数を返す
         return text => text.replace(
-            /[０-９]/g,
-            m => String.fromCharCode(m.charCodeAt(0) - diff)
+            /[０-９]/g
+            , m => String.fromCharCode(m.charCodeAt(0) - diff)
         );
     })();
 
     const create_quiz = async () => {
-        for (const quiz of quizzes) {
-            if (quiz.correct !== "") {
-                Contract.create_quiz(
-                    quiz.title,
-                    quiz.explanation,
-                    quiz.thumbnail_url,
-                    quiz.content,
-                    quiz.answer_type,
-                    quiz.answer_data,
-                    convertFullWidthNumbersToHalf(quiz.correct),
-                    quiz.reply_startline,
-                    quiz.reply_deadline,
-                    quiz.reward,
-                    quiz.correct_limit,
-                    setShow
-                );
-            } else {
-                alert("正解を入力してください");
-            }
+        //console.log(title, explanation, thumbnail_url, content, answer_data, correct, reply_startline, reply_deadline, reward, correct_limit);
+
+        if (correct !== "") {
+            console.log(new Date(reply_startline).getTime(), new Date(reply_deadline).getTime());
+            Contract.create_quiz(title, explanation, thumbnail_url, content, answer_type, answer_data, convertFullWidthNumbersToHalf(correct), reply_startline, reply_deadline, reward, correct_limit, setShow);
+        } else {
+            alert("正解を入力してください");
         }
     };
+
+
 
     function getLocalizedDateTimeString(now = new Date()) {
         const year = now.getFullYear();
@@ -88,113 +84,107 @@ function Create_quiz() {
 
         return localizedDateTimeString;
     }
-
     function addDays(date, days) {
         date.setDate(date.getDate() + days);
         return date;
     }
 
-    const addQuiz = () => {
-        setQuizzes([...quizzes, {
-            title: "",
-            explanation: "",
-            thumbnail_url: "",
-            content: "",
-            answer_type: 0,
-            answer_data: [],
-            correct: "",
-            reply_startline: new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }).replace(/[/]/g, "-").replace(/\s(\d):/, " 0$1:"),
-            reply_deadline: getLocalizedDateTimeString(addDays(new Date(), 1)),
-            reward: 0,
-            correct_limit: null,
-        }]);
-    };
-
-    const removeQuiz = (index) => {
-        setQuizzes(quizzes.filter((quiz, i) => i !== index));
-    };
-
-    const handleQuizChange = (index, field, value) => {
-        const newQuizzes = quizzes.map((quiz, i) => i === index ? { ...quiz, [field]: value } : quiz);
-        setQuizzes(newQuizzes);
-    };
-
+    //初回のみ実行
     useEffect(() => {
+        // let now = new Date();
+        // const diff_time = new Date(now + 100);
+        // setReply_deadline(addDays(now, 5));
         async function get_contract() {
-            const correctLimit = (await Contract.get_num_of_students()) + 30;
-            setQuizzes(quizzes.map(quiz => ({
-                ...quiz,
-                correct_limit: correctLimit
-            })));
+            setCorrect_limit((await Contract.get_num_of_students()) + 30);
         }
         get_contract();
         setnow(getLocalizedDateTimeString());
+        // console.log(now);
+        // console.log(new Date().toISOString().slice(0, 16));
     }, []);
+    console.log(reply_deadline);
+    console.log(reply_startline);
 
     return (
         <div>
             <div className="row">
                 <div className="col-2" />
                 <div className="col-8">
-                    {quizzes.map((quiz, index) => (
-                        <div key={index}>
-                            <h3>クイズ {index + 1}</h3>
-                            <Form>
-                                <Form.Group className="mb-3" controlId={`form_title_${index}`} style={{ textAlign: "left" }}>
-                                    <Form.Label>タイトル</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter Title" value={quiz.title} onChange={(event) => handleQuizChange(index, "title", event.target.value)} />
-                                </Form.Group>
-                                <Form.Group className="mb-3" style={{ textAlign: "left" }}>
-                                    <Form.Label>説明</Form.Label>
-                                    <Form.Control as="textarea" rows={quiz.explanation.split("\n").length + 3} value={quiz.explanation} onChange={(event) => handleQuizChange(index, "explanation", event.target.value)} />
-                                </Form.Group>
-                                <Form.Group className="mb-3" style={{ textAlign: "left" }}>
-                                    <Form.Label>サムネイル</Form.Label>
-                                    <Form.Control type="url" value={quiz.thumbnail_url} onChange={(event) => handleQuizChange(index, "thumbnail_url", event.target.value)} />
-                                </Form.Group>
-                                <img src={quiz.thumbnail_url} width="200" alt="サムネイル" />
-                                <br />
-                                <Form.Group className="mb-3" data-color-mode="light" style={{ textAlign: "left" }}>
-                                    <Form.Label>内容</Form.Label>
-                                    <MDEditor height={500} value={quiz.content} onChange={(value) => handleQuizChange(index, "content", value)} />
-                                </Form.Group>
-                                <Answer_select name={"回答の追加"} variable={quiz.answer_data} variable1={quiz.correct} set={(data) => handleQuizChange(index, "answer_data", data)} set1={(correct) => handleQuizChange(index, "correct", correct)} setAnswer_type={(type) => handleQuizChange(index, "answer_type", type)} answer_type={quiz.answer_type} />
-                                <Form.Group className="mb-3" style={{ textAlign: "left" }}>
-                                    <Form.Label>回答開始日時</Form.Label>
-                                    <Form.Control
-                                        type="datetime-local"
-                                        defaultValue={quiz.reply_startline}
-                                        min={now}
-                                        onChange={(event) => handleQuizChange(index, "reply_startline", new Date(event.target.value))}
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3" style={{ textAlign: "left" }}>
-                                    <Form.Label>回答締切日時</Form.Label>
-                                    <Form.Control
-                                        type="datetime-local"
-                                        defaultValue={quiz.reply_deadline}
-                                        min={now}
-                                        onChange={(event) => handleQuizChange(index, "reply_deadline", new Date(event.target.value))}
-                                    />
-                                </Form.Group>
-                                <Button variant="danger" onClick={() => removeQuiz(index)} style={{ marginTop: "20px" }}>
-                                    クイズを削除
-                                </Button>
-                                <hr />
-                            </Form>
-                        </div>
-                    ))}
+                    <Form>
+                        <Form.Group className="mb-3" controlId="form_titile" style={{ textAlign: "left" }}>
+                            <Form.Label>タイトル</Form.Label>
+                            <Form.Control type="text" placeholder="Enter Title" value={title} onChange={(event) => setTitle(event.target.value)} />
+                        </Form.Group>
+                    </Form>
+                    <Form.Group className="mb-3" style={{ textAlign: "left" }}>
+                        <Form.Label>説明</Form.Label>
+                        <Form.Control as="textarea" rows={explanation.split("\n").length + 3} value={explanation} onChange={(event) => setExplanation(event.target.value)} />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" style={{ textAlign: "left" }}>
+                        <Form.Label>サムネイル</Form.Label>
+                        <Form.Control type="url" value={thumbnail_url} onChange={(event) => setThumbnail_url(event.target.value)} />
+                    </Form.Group>
+                    <img src={thumbnail_url} width="200" />
+                    <br />
+
+                    <Form.Group className="mb-3" data-color-mode="light" style={{ textAlign: "left" }}>
+                        <Form.Label>内容</Form.Label>
+                        <MDEditor height={500} value={content} onChange={setContent} />
+                    </Form.Group>
+
+                    {/*<Form.Group className="mb-3" style={{ textAlign: "left" }}>
+                        <Form.Label>選択肢(正解の回答にチェックを入れてください)</Form.Label><br />
+                        <Answer_area1 name={"回答の追加"} variable={answer_data} variable1={correct} set={setAnswer_data} set1={setCorrect}/>
+                    </Form.Group> */}
+                    <Answer_select name={"回答の追加"} variable={answer_data} variable1={correct} set={setAnswer_data} set1={setCorrect} setAnswer_type={setAnswer_type} answer_type={answer_type} />
+
+                    <Form.Group className="mb-3" style={{ textAlign: "left" }}>
+                        <Form.Label>回答開始日時</Form.Label>
+                        <Form.Control
+                            type="datetime-local"
+                            defaultValue={now}
+                            //value={reply_deadline}
+                            min={now}
+                            onChange={(event) => setReply_startline(new Date(event.target.value))}
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" style={{ textAlign: "left" }}>
+                        <Form.Label>回答締切日時</Form.Label>
+                        <Form.Control
+                            type="datetime-local"
+                            defaultValue={reply_deadline}
+                            //value={reply_deadline}
+                            min={now}
+                            onChange={(event) => setReply_deadline(new Date(event.target.value))}
+                        />
+                    </Form.Group>
+                    {/*
+                    <div className="row">
+
+                        <Form.Group className="mb-3 col-4" style={{ textAlign: "left" }}>
+                            <Form.Label>報酬</Form.Label>
+                            <Form.Control type="number" min={1} step={1} value={reward} onChange={(event) => setReward(parseInt(event.target.value))} />
+                        </Form.Group>
+                        <div className="col-1" />
+
+                        <Form.Group className="mb-3 col-4" style={{ textAlign: "left" }}>
+                            <Form.Label>正解の上限</Form.Label>
+                            <Form.Control type="number" min={1} step={1} value={correct_limit} onChange={(event) => setCorrect_limit(parseInt(event.target.value))} />
+                        </Form.Group>
+                    </div>
+                    */}
+
                     <div style={{ textAlign: "right" }}>
-                        <Button variant="primary" onClick={addQuiz} style={{ marginRight: "20px" }}>
-                            クイズを追加
-                        </Button>
-                        <Button variant="primary" onClick={create_quiz} style={{ marginTop: "20px" }}>
+                        <Button variant="primary" onClick={() => create_quiz()} style={{ marginTop: "20px" }}>
                             クイズを作成
                         </Button>
                     </div>
                 </div>
                 <div className="col-2" />
             </div>
+
             <Wait_Modal showFlag={show} />
         </div>
     );
