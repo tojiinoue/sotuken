@@ -845,6 +845,22 @@ class Contracts_MetaMask {
             console.log(err);
         }
     }
+
+    async create_quizzes(quizzes, setShow) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const account = accounts[0];
+
+            await this.contract.methods.create_quizzes(quizzes).send({ from: account });
+
+            setShow(false);
+            alert('クイズが一括作成されました');
+        } catch (error) {
+            console.error('Error creating quizzes:', error);
+            setShow(false);
+            alert('クイズの一括作成中にエラーが発生しました');
+        }
+    }
 }
 
 export { Contracts_MetaMask };
