@@ -144,9 +144,9 @@ function Quiz_list(props) {
         let now_quiz_list = []; */ //コメントアウトしたからダメなら戻す
 
         //add_quiz_listをmapで展開して、now_quiz_listに追加
-        add_quiz_list.map((quiz) => {
+        /* add_quiz_list.map((quiz) => {
             now_quiz_list.push(<Simple_quiz quiz={quiz} />); //DOMとして追加
-        });
+        }); */  //コメントアウトしたからダメなら戻す
 
         //quiz_listにnow_quiz_listを追加
         //console.log([...quiz_list, ...now_quiz_list]);
