@@ -23,6 +23,17 @@ function List_quiz_top(props) {
     // コンテナのrefを作成
     const containerRef = useRef(null);
 
+    // ステータスフィルタリング用のステート
+    const [statusFilter, setStatusFilter] = useState(undefined);
+
+    useEffect(() => {
+        cont.get_quiz_lenght().then((data) => {
+            let now = parseInt(Number(data));
+            Set_quiz_sum(now);
+            now_numRef.current = now;
+        });
+    }, []);
+
     const callback = (entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -50,8 +61,26 @@ function List_quiz_top(props) {
     if (quiz_sum != null) {
         return (
             <>
+　　　　　　　　　 {/* フィルタリングボタンを追加 井上変更点*/}
+                <div>
+                    <button onClick={() => setStatusFilter(undefined)}>すべて</button>
+                    <button onClick={() => setStatusFilter(0)}>未回答</button>
+                    <button onClick={() => setStatusFilter(1)}>不正解</button>
+                    <button onClick={() => setStatusFilter(2)}>正解</button>
+                </div>
                 {/* スクロールを監視するコンポーネント */}
-                <Quiz_list cont={cont} add_num={add_num} Set_add_num={Set_add_num} quiz_sum={quiz_sum} Set_quiz_sum={Set_quiz_sum} quiz_list={quiz_list} Set_quiz_list={Set_quiz_list} targetRef={targetRef} now_numRef={now_numRef} />
+                <Quiz_list 
+                    cont={cont} 
+                    add_num={add_num} 
+                    Set_add_num={Set_add_num} 
+                    quiz_sum={quiz_sum} 
+                    Set_quiz_sum={Set_quiz_sum} 
+                    quiz_list={quiz_list} 
+                    Set_quiz_list={Set_quiz_list} 
+                    targetRef={targetRef} 
+                    now_numRef={now_numRef}
+                    statusFilter={statusFilter} // ここでフィルタリング用のステートを渡す井上変更点
+                />
 
                 {/* */}
                 {quiz_list.map((quiz, index) => {
