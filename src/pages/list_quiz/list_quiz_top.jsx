@@ -23,8 +23,13 @@ function List_quiz_top(props) {
     // コンテナのrefを作成
     const containerRef = useRef(null);
 
-    // ステータスフィルタリング用のステート
+    // ステータスフィルタリング用のステート  26~32追加した
     const [statusFilter, setStatusFilter] = useState(undefined);
+
+    const handleFilterChange = (filter) => {
+        console.log("Filter button clicked. New filter value:", filter); // フィルタリングの変更を確認
+        setStatusFilter(filter);
+    };
 
     useEffect(() => {
         cont.get_quiz_lenght().then((data) => {
@@ -61,7 +66,7 @@ function List_quiz_top(props) {
     if (quiz_sum != null) {
         return (
             <>
-　　　　　　　　　 {/* フィルタリングボタンを追加 井上変更点*/}
+                {/* フィルタリングボタンを追加 井上変更点*/}
                 <div>
                     <button onClick={() => setStatusFilter(undefined)}>すべて</button>
                     <button onClick={() => setStatusFilter(0)}>未回答</button>
@@ -69,15 +74,15 @@ function List_quiz_top(props) {
                     <button onClick={() => setStatusFilter(2)}>正解</button>
                 </div>
                 {/* スクロールを監視するコンポーネント */}
-                <Quiz_list 
-                    cont={cont} 
-                    add_num={add_num} 
-                    Set_add_num={Set_add_num} 
-                    quiz_sum={quiz_sum} 
-                    Set_quiz_sum={Set_quiz_sum} 
-                    quiz_list={quiz_list} 
-                    Set_quiz_list={Set_quiz_list} 
-                    targetRef={targetRef} 
+                <Quiz_list
+                    cont={cont}
+                    add_num={add_num}
+                    Set_add_num={Set_add_num}
+                    quiz_sum={quiz_sum}
+                    Set_quiz_sum={Set_quiz_sum}
+                    quiz_list={quiz_list}
+                    Set_quiz_list={Set_quiz_list}
+                    targetRef={targetRef}
                     now_numRef={now_numRef}
                     statusFilter={statusFilter} // ここでフィルタリング用のステートを渡す井上変更点
                 />
