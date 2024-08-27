@@ -100,6 +100,7 @@ function Quiz_list(props) {
     const location = useLocation();
     //画面を満たす個数を計算して、add_numに代入
     const add_num = useRef(Math.floor(window.innerHeight / 100) + 2);
+    const [localQuizList, setLocalQuizList] = useState([]);
 
     //表示するクイズのリスト
     // const [quiz_list,Set_quiz_list] =useState([]);
@@ -131,13 +132,15 @@ function Quiz_list(props) {
             if (props.statusFilter !== undefined) {
                 return Number(quiz[10]) === props.statusFilter; // クイズの状態でフィルタリング
             }
-            return true;
+            return true;            
         });
 
-        // フィルタリング後のクイズリストを表示
+        setLocalQuizList((prevList) => [...prevList, ...filtered_quiz_list]);
+
+        /* // フィルタリング後のクイズリストを表示
         let now_quiz_list = filtered_quiz_list.map((quiz) => (
             <Simple_quiz quiz={quiz} key={quiz[0].toString()} />
-        ));
+        )); */ //20240827コメントアウト
 
 
         /* //new_quiz_listをmapで展開して、quiz_listに追加
@@ -150,7 +153,7 @@ function Quiz_list(props) {
 
         //quiz_listにnow_quiz_listを追加
         //console.log([...quiz_list, ...now_quiz_list]);
-        Set_quiz_list((quiz_list) => [...quiz_list, ...now_quiz_list]);
+        //Set_quiz_list((quiz_list) => [...quiz_list, ...now_quiz_list]);
     };
 
     const options = {
@@ -185,11 +188,19 @@ function Quiz_list(props) {
             }
         }
         return () => {
-            observer.unobserve(targetElement); // コンポーネントがアンマウントされる際にunobserve
+            if (targetElement) {
+                observer.unobserve(targetElement); // コンポーネントがアンマウントされる際にunobserve
+            }
         };
     }, [props.statusFilter]); // ステータスフィルターの変更を監視　井上変更点（絞り込み機能のため）
 
-    return null; // 必要に応じてUIを返す　井上変更点（絞り込み機能のため）
+    return (
+        <div>
+            {localQuizList.map((quiz) => (
+                <Simple_quiz quiz={quiz} key={quiz[0].toString()} />
+            ))}
+        </div>
+    );
 }
 
         /* //パラメータを取得

@@ -26,11 +26,6 @@ function List_quiz_top(props) {
     // ステータスフィルタリング用のステート  26~32追加した
     const [statusFilter, setStatusFilter] = useState(undefined);
 
-    const handleFilterChange = (filter) => {
-        console.log("Filter button clicked. New filter value:", filter); // フィルタリングの変更を確認
-        setStatusFilter(filter);
-    };
-
     useEffect(() => {
         cont.get_quiz_lenght().then((data) => {
             let now = parseInt(Number(data));
@@ -39,7 +34,7 @@ function List_quiz_top(props) {
         });
     }, []);
 
-    const callback = (entries, observer) => {
+    /* const callback = (entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 // ターゲットの<div>が画面に表示された場合に実行される関数
@@ -49,17 +44,29 @@ function List_quiz_top(props) {
                 // console.log("///////",now_num);
             }
         });
-    };
+    }; */ //井上コメントアウトしたダメなら戻す
+
 
     useEffect(() => {
-        cont.get_quiz_lenght().then((data) => {
-            // Promise オブジェクトが解決された後の処理を記述
-            console.log(Number(data));
-            let now = parseInt(Number(data));
-            Set_quiz_sum(now);
-            now_numRef.current = now;
+        // クイズリストを取得し、フィルタリングを適用
+        cont.get_quiz_list().then((data) => {
+            const filteredData = applyFilter(data);
+            Set_quiz_list(filteredData);
         });
-    }, []);
+    }, [statusFilter]);
+
+    // フィルタリングのロジック
+    const applyFilter = (quizzes) => {
+        if (statusFilter === undefined) {
+            return quizzes;
+        }
+        return quizzes.filter(quiz => Number(quiz[10]) === statusFilter);
+    };
+
+    // フィルターボタンのクリック時にフィルタリングを変更
+    const handleFilterChange = (filter) => {
+        setStatusFilter(filter);
+    };
 
     const targetRef = useRef(null); // ターゲット要素のrefを作成
 
