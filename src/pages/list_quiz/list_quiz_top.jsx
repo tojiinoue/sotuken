@@ -20,6 +20,8 @@ function List_quiz_top(props) {
     const [quiz_list, Set_quiz_list] = useState([]); //保存
     //１回の更新で追加で表示する個数
     const [add_num, Set_add_num] = useState(7);
+    // フィルタリングの状態を追加
+    const [filter, setFilter] = useState('all'); //井上絞り込み機能のために追加20240828
     // コンテナのrefを作成
     const containerRef = useRef(null);
 
@@ -44,14 +46,25 @@ function List_quiz_top(props) {
             now_numRef.current = now;
         });
     }, []);
-
-    const targetRef = useRef(null); // ターゲット要素のrefを作成
+    
+    const handleFilterChange = (event) => {
+        setFilter(event.target.value);
+    };//井上絞り込み機能のために追加20240828
+    //const targetRef = useRef(null); // ターゲット要素のrefを作成 井上コメントアウトにした20240828
 
     if (quiz_sum != null) {
         return (
             <>
+                {/* 井上絞り込み機能のために追加20240828 */}
+                <Form.Select value={filter} onChange={handleFilterChange}>
+                    <option value="all">全て</option>
+                    <option value="0">未回答</option>
+                    <option value="1">不正解</option>
+                    <option value="2">正解</option>
+                </Form.Select>
+
                 {/* スクロールを監視するコンポーネント */}
-                <Quiz_list cont={cont} add_num={add_num} Set_add_num={Set_add_num} quiz_sum={quiz_sum} Set_quiz_sum={Set_quiz_sum} quiz_list={quiz_list} Set_quiz_list={Set_quiz_list} targetRef={targetRef} now_numRef={now_numRef} />
+                <Quiz_list cont={cont} add_num={add_num} Set_add_num={Set_add_num} quiz_sum={quiz_sum} Set_quiz_sum={Set_quiz_sum} quiz_list={quiz_list} Set_quiz_list={Set_quiz_list} targetRef={targetRef} now_numRef={now_numRef} filter={filter} />
 
                 {/* */}
                 {quiz_list.map((quiz, index) => {

@@ -3,6 +3,7 @@ import token_contract from "./token_abi.json";
 import quiz_contract from "./quiz_abi.json";
 import { chainId, rpc, quiz_address, token_address } from "./config";
 import { amoy } from "./network";
+import { Status } from "discord.js";
 
 const { ethereum } = window;
 const homeUrl = process.env.PUBLIC_URL;
@@ -616,17 +617,25 @@ class Contracts_MetaMask {
         let res = [];
         let account = await this.get_address();
 
-        console.log(start, end);
+        console.log(start, end, status);
         if (start <= end) {
             for (let i = start; i < end; i++) {
                 console.log(i);
-                res.push(await quiz.read.get_quiz_simple({ account, args: [i] }));
+                let quizData = await quiz.read.get_quiz_simple({ account, args: [i] });
+                // ステータスが指定されている場合、クイズのステータスでフィルタリング
+                if (status === null || quizData.status === status) {
+                    res.push(quizData);
+                }
                 console.log(res);
             }
         } else {
             for (let i = start - 1; i >= end; i--) {
                 console.log(i);
-                res.push(await quiz.read.get_quiz_simple({ account, args: [i] }));
+                let quizData = await quiz.read.get_quiz_simple({ account, args: [i] });
+                // ステータスが指定されている場合、クイズのステータスでフィルタリング
+                if (status === null || quizData.status === status) {
+                    res.push(quizData);
+                }
                 console.log(res);
             }
         }

@@ -13,24 +13,25 @@ function Quiz_list(props) {
     //表示するクイズのリスト
     // const [quiz_list,Set_quiz_list] =useState([]);
 
-    const quiz_list = props.quiz_list;
-    const Set_quiz_list = props.Set_quiz_list;
+    /* const quiz_list = props.quiz_list;
+    const Set_quiz_list = props.Set_quiz_list; *///井上絞り込み機能のためにコメントアウト20240828
 
     //クイズのリストを取得
     const get_quiz_list = async (now) => {
         //追加分のクイズ用のリスト
         let add_quiz_list = [];
+        let filterStatus = props.filter === 'all' ? null : props.filter;//20240828追加
 
         //クイズの総数を超えていたら
         if (now - add_num.current < 0) {
             //now_numからquiz_numまでのクイズを取得
-            add_quiz_list = await props.cont.get_quiz_list(now, 0);
+            add_quiz_list = await props.cont.get_quiz_list(now, 0, filterStatus);//20240828filterStatus
             //now_numを0にする
             props.now_numRef.current = 0;
         } else {
             //クイズの総数を超えていなかったら
             //now_numからnow_num+add_numまでのクイズを取得
-            add_quiz_list = await props.cont.get_quiz_list(now, now - add_num.current);
+            add_quiz_list = await props.cont.get_quiz_list(now, now - add_num.current, filterStatus);//20240828filterStatus
             //now_numをnow_num+add_numにする
             props.now_numRef.current = now - add_num.current;
         }
@@ -44,7 +45,7 @@ function Quiz_list(props) {
 
         //quiz_listにnow_quiz_listを追加
         //console.log([...quiz_list, ...now_quiz_list]);
-        Set_quiz_list((quiz_list) => [...quiz_list, ...now_quiz_list]);
+        props.Set_quiz_list((quiz_list) => [...quiz_list, ...now_quiz_list]);//props.を追加井上絞り込み機能のために20240828
     };
 
     const options = {
@@ -84,5 +85,6 @@ function Quiz_list(props) {
 
         //パラメータを取得
     }, []); // []を指定して初期状態のみで実行されるようにする
+    return null;
 }
 export default Quiz_list;
