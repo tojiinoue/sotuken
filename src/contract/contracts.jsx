@@ -617,13 +617,13 @@ class Contracts_MetaMask {
         let res = [];
         let account = await this.get_address();
 
-        console.log(start, end, status);
+        console.log(start, end, quizStatus);
         if (start <= end) {
             for (let i = start; i < end; i++) {
                 console.log(i);
                 let quizData = await quiz.read.get_quiz_simple({ account, args: [i] });
                 // ステータスが指定されている場合、クイズのステータスでフィルタリング
-                if (status === null || quizData.status === status) {
+                if (quizStatus === null || quizData.status === quizStatus) {
                     res.push(quizData);
                 }
                 console.log(res);
@@ -633,7 +633,7 @@ class Contracts_MetaMask {
                 console.log(i);
                 let quizData = await quiz.read.get_quiz_simple({ account, args: [i] });
                 // ステータスが指定されている場合、クイズのステータスでフィルタリング
-                if (status === null || quizData.status === status) {
+                if (status === null || quizData.status === quizStatus) {
                     res.push(quizData);
                 }
                 console.log(res);
@@ -642,7 +642,7 @@ class Contracts_MetaMask {
         return res;
     }
 
-    async get_quiz_lenght() {
+    async get_quiz_length() {
         return await quiz.read.get_quiz_length();
     }
 
@@ -852,22 +852,6 @@ class Contracts_MetaMask {
             }
         } catch (err) {
             console.log(err);
-        }
-    }
-
-    async create_quizzes(quizzes, setShow) {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const account = accounts[0];
-
-            await this.contract.methods.create_quizzes(quizzes).send({ from: account });
-
-            setShow(false);
-            alert('クイズが一括作成されました');
-        } catch (error) {
-            console.error('Error creating quizzes:', error);
-            setShow(false);
-            alert('クイズの一括作成中にエラーが発生しました');
         }
     }
 }
