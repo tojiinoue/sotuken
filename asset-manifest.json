@@ -1,30 +1,30 @@
 {
   "files": {
     "main.css": "/sotuken/static/css/main.fe6c1b77.chunk.css",
-    "main.js": "/sotuken/static/js/main.03658a2e.chunk.js",
-    "main.js.map": "/sotuken/static/js/main.03658a2e.chunk.js.map",
-    "runtime-main.js": "/sotuken/static/js/runtime-main.fb680085.js",
-    "runtime-main.js.map": "/sotuken/static/js/runtime-main.fb680085.js.map",
+    "main.js": "/sotuken/static/js/main.be0e9314.chunk.js",
+    "main.js.map": "/sotuken/static/js/main.be0e9314.chunk.js.map",
+    "runtime-main.js": "/sotuken/static/js/runtime-main.ac63cd4c.js",
+    "runtime-main.js.map": "/sotuken/static/js/runtime-main.ac63cd4c.js.map",
     "static/css/2.82b92362.chunk.css": "/sotuken/static/css/2.82b92362.chunk.css",
-    "static/js/2.620edaaa.chunk.js": "/sotuken/static/js/2.620edaaa.chunk.js",
-    "static/js/2.620edaaa.chunk.js.map": "/sotuken/static/js/2.620edaaa.chunk.js.map",
-    "static/js/3.d70de6ef.chunk.js": "/sotuken/static/js/3.d70de6ef.chunk.js",
-    "static/js/3.d70de6ef.chunk.js.map": "/sotuken/static/js/3.d70de6ef.chunk.js.map",
+    "static/js/2.6f93d334.chunk.js": "/sotuken/static/js/2.6f93d334.chunk.js",
+    "static/js/2.6f93d334.chunk.js.map": "/sotuken/static/js/2.6f93d334.chunk.js.map",
+    "static/js/3.045c2181.chunk.js": "/sotuken/static/js/3.045c2181.chunk.js",
+    "static/js/3.045c2181.chunk.js.map": "/sotuken/static/js/3.045c2181.chunk.js.map",
     "static/js/4.9fa12bec.chunk.js": "/sotuken/static/js/4.9fa12bec.chunk.js",
     "static/js/4.9fa12bec.chunk.js.map": "/sotuken/static/js/4.9fa12bec.chunk.js.map",
     "index.html": "/sotuken/index.html",
     "static/css/2.82b92362.chunk.css.map": "/sotuken/static/css/2.82b92362.chunk.css.map",
     "static/css/main.fe6c1b77.chunk.css.map": "/sotuken/static/css/main.fe6c1b77.chunk.css.map",
-    "static/js/2.620edaaa.chunk.js.LICENSE.txt": "/sotuken/static/js/2.620edaaa.chunk.js.LICENSE.txt",
+    "static/js/2.6f93d334.chunk.js.LICENSE.txt": "/sotuken/static/js/2.6f93d334.chunk.js.LICENSE.txt",
     "static/media/blocto-icon.ff8c029b.svg": "/sotuken/static/media/blocto-icon.ff8c029b.svg",
     "static/media/logo.6ce24c58.svg": "/sotuken/static/media/logo.6ce24c58.svg",
     "static/media/metamask-icon.b3649ecf.svg": "/sotuken/static/media/metamask-icon.b3649ecf.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.fb680085.js",
+    "static/js/runtime-main.ac63cd4c.js",
     "static/css/2.82b92362.chunk.css",
-    "static/js/2.620edaaa.chunk.js",
+    "static/js/2.6f93d334.chunk.js",
     "static/css/main.fe6c1b77.chunk.css",
-    "static/js/main.03658a2e.chunk.js"
+    "static/js/main.be0e9314.chunk.js"
   ]
 }
