@@ -11,6 +11,8 @@ function List_quiz_top(props) {
     //クイズのコントラクト
     let cont = new Contracts_MetaMask();
 
+    const targetRef = useRef(null); // 修正点: targetRefを定義
+
     //現在表示している個数を保持するref
     const now_numRef = useRef(0); //保存
     //クイズの総数

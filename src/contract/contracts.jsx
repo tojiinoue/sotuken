@@ -3,7 +3,7 @@ import token_contract from "./token_abi.json";
 import quiz_contract from "./quiz_abi.json";
 import { chainId, rpc, quiz_address, token_address } from "./config";
 import { amoy } from "./network";
-import { Status } from "discord.js";
+//import { Status } from "discord.js";
 
 const { ethereum } = window;
 const homeUrl = process.env.PUBLIC_URL;
@@ -34,6 +34,20 @@ const quiz = getContract({
     walletClient,
     publicClient,
 });
+
+const QuizStatuses = {
+    ALL: null,          // 全てのクイズを表示
+    UNANSWERED: 0,      // 未回答
+    INCORRECT: 1,       // 不正解
+    CORRECT: 2          // 正解
+};
+
+// フィルタリング条件を設定する変数
+let quizStatus = QuizStatuses.ALL; // 初期値は全てのクイズを表示
+
+// ユーザーがフィルタリングオプションを選択した際に、quizStatusを更新する
+// 例: 未回答のクイズのみを表示する
+quizStatus = QuizStatuses.UNANSWERED;
 
 if (window.ethereum) {
     window.ethereum.on("chainChanged", () => {
@@ -613,10 +627,9 @@ class Contracts_MetaMask {
     //startからendまでのクイズを取得
 
     async get_quiz_list(start, end) {
-        //取得したクイズを格納する配列
         let res = [];
         let account = await this.get_address();
-
+    
         console.log(start, end, quizStatus);
         if (start <= end) {
             for (let i = start; i < end; i++) {
@@ -632,8 +645,7 @@ class Contracts_MetaMask {
             for (let i = start - 1; i >= end; i--) {
                 console.log(i);
                 let quizData = await quiz.read.get_quiz_simple({ account, args: [i] });
-                // ステータスが指定されている場合、クイズのステータスでフィルタリング
-                if (status === null || quizData.status === quizStatus) {
+                if (quizStatus === null || quizData.status === quizStatus) {
                     res.push(quizData);
                 }
                 console.log(res);
@@ -641,7 +653,7 @@ class Contracts_MetaMask {
         }
         return res;
     }
-
+    
     async get_quiz_length() {
         return await quiz.read.get_quiz_length();
     }
