@@ -1,9 +1,0 @@
-{
-  "presets": ["@babel/preset-env"],
-  "plugins": [
-    ["babel-plugin-polyfill-corejs3", {
-      "method": "usage-pure",
-      "targets": "> 0.25%, not dead"
-    }]
-  ]
-}
