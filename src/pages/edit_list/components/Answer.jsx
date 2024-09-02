@@ -122,7 +122,7 @@ function Answer(props) {
     };
     useEffect(() => {
         get_quiz();
-    }, []);
+    }, [get_quiz]);
 
     if (quiz) {
         return (

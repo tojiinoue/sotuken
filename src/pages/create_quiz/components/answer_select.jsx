@@ -1,6 +1,4 @@
 import {useState} from "react";
-import Button from "react-bootstrap/Button";
-import {ImCross} from "react-icons/im";
 import Answer_area1 from "./answer_form1";
 import Answer_area2 from "./answer_form2";
 

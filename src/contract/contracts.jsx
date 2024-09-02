@@ -35,6 +35,7 @@ const quiz = getContract({
     publicClient,
 });
 
+// クイズのフィルタリング状態を管理するオブジェクト
 const QuizStatuses = {
     ALL: null,          // 全てのクイズを表示
     UNANSWERED: 0,      // 未回答
@@ -45,9 +46,19 @@ const QuizStatuses = {
 // フィルタリング条件を設定する変数
 let quizStatus = QuizStatuses.ALL; // 初期値は全てのクイズを表示
 
-// ユーザーがフィルタリングオプションを選択した際に、quizStatusを更新する
-// 例: 未回答のクイズのみを表示する
-quizStatus = QuizStatuses.UNANSWERED;
+// フィルタリング条件を動的に変更する関数
+function updateQuizStatus(newStatus) {
+    quizStatus = newStatus;
+    console.log(`Quiz status updated to: ${quizStatus}`);
+    // 必要に応じて、クイズのリストを再取得するなどの処理を行う
+    // 例: fetchQuizzes();
+}
+
+// イベントリスナーを追加して、ユーザーのフィルタリングオプションの変更を監視
+document.getElementById('filterDropdown').addEventListener('change', (event) => {
+    const selectedStatus = event.target.value;
+    updateQuizStatus(QuizStatuses[selectedStatus.toUpperCase()]);
+});
 
 if (window.ethereum) {
     window.ethereum.on("chainChanged", () => {
@@ -626,37 +637,30 @@ class Contracts_MetaMask {
 
     //startからendまでのクイズを取得
 
-    async get_quiz_list(start, end) {
+    async get_quiz_list(start, end, statusFilter = null) {
         let res = [];
         let account = await this.get_address();
     
-        console.log(start, end, quizStatus);
-        if (start <= end) {
+        try {
+            // クイズリストを取得するループ
             for (let i = start; i < end; i++) {
-                console.log(i);
                 let quizData = await quiz.read.get_quiz_simple({ account, args: [i] });
-                // ステータスが指定されている場合、クイズのステータスでフィルタリング
-                if (quizStatus === null || quizData.status === quizStatus) {
+    
+                // フィルタリング条件に基づいてクイズを追加
+                if (statusFilter === null || quizData.status === statusFilter) {
                     res.push(quizData);
                 }
-                console.log(res);
             }
-        } else {
-            for (let i = start - 1; i >= end; i--) {
-                console.log(i);
-                let quizData = await quiz.read.get_quiz_simple({ account, args: [i] });
-                if (quizStatus === null || quizData.status === quizStatus) {
-                    res.push(quizData);
-                }
-                console.log(res);
-            }
+        } catch (err) {
+            console.log(err);
         }
         return res;
     }
     
+    
     async get_quiz_length() {
         return await quiz.read.get_quiz_length();
-    }
+    }    
 
     async get_num_of_students() {
         return Number(await quiz.read.get_num_of_students());

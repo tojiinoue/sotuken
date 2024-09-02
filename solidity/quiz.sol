@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+/// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
 import "./class_room.sol";
@@ -39,10 +39,28 @@ contract Quiz_Dapp is class_room {
         bool is_payment;
         string confirm_answer;
         uint answer_count;
+        uint status; // クイズの状態を管理するフィールド
         mapping(address => uint) respondents_map; //0が未回答,1が不正解,2が正解,3が回答済み
         mapping(address => uint) respondents_state;
         Answer[] answers;
         mapping(address => bytes32) students_answer_hashs;
+    }
+
+    struct QuizSummary {
+        uint quiz_id;
+        address owner;
+        string title;
+        string explanation;
+        string thumbnail_url;
+        string content;
+        uint answer_type;
+        uint create_time_epoch;
+        uint256 start_time_epoch;
+        uint time_limit_epoch;
+        uint reward;
+        uint respondent_count;
+        uint respondent_limit;
+        uint status;
     }
     struct Answer {
         address respondent;
@@ -51,60 +69,7 @@ contract Quiz_Dapp is class_room {
         bool result;
     }
 
-    struct QuizInput {
-        string title;
-        string explanation;
-        string thumbnail_url;
-        string content;
-        uint answer_type;
-        string answer_data;
-        string answer;
-        uint startline_after_epoch;
-        uint timelimit_after_epoch;
-        uint reward;
-        uint respondent_limit;
-    }//追加（54~66)
-
     Quiz[] private quizs;
-
-    event Create_quizzes(address indexed _sender, uint[] indexed ids);
-
-    function create_quizzes(QuizInput[] memory quizzes) public returns (uint[] memory ids) {
-        uint totalReward = 0;
-        for (uint i = 0; i < quizzes.length; i++) {
-            totalReward += quizzes[i].reward * quizzes[i].respondent_limit;
-        }
-        require(token.allowance(msg.sender, address(this)) >= totalReward, "Not enough token approve fees");
-
-        token.transferFrom_explanation(msg.sender, address(this), totalReward, "create_quizzes");
-
-        ids = new uint[](quizzes.length);
-        for (uint i = 0; i < quizzes.length; i++) {
-            uint id = quizs.length;
-            quizs.push();
-
-            bytes32 answer_hash = keccak256(abi.encodePacked(quizzes[i].answer));
-            quizs[id].owner = msg.sender;
-            quizs[id].title = quizzes[i].title;
-            quizs[id].explanation = quizzes[i].explanation;
-            quizs[id].thumbnail_url = quizzes[i].thumbnail_url;
-            quizs[id].content = quizzes[i].content;
-            quizs[id].answer_type = quizzes[i].answer_type;
-            quizs[id].answer_data = quizzes[i].answer_data;
-            quizs[id].answer_hash = answer_hash;
-            quizs[id].create_time_epoch = block.timestamp;
-            quizs[id].start_time_epoch = quizzes[i].startline_after_epoch;
-            quizs[id].time_limit_epoch = quizzes[i].timelimit_after_epoch;
-            quizs[id].reward = quizzes[i].reward;
-            quizs[id].respondent_count = 0;
-            quizs[id].respondent_limit = quizzes[i].respondent_limit;
-
-            users[msg.sender].create_quiz_count += 1;
-            ids[i] = id;
-        }
-        emit Create_quizzes(msg.sender, ids);
-        return ids;
-    }//追加（70~107）
 
     event Set_approve(bool isSuccess, uint allowance, address owner, address spender);
 
@@ -158,6 +123,7 @@ contract Quiz_Dapp is class_room {
         quizs[id].respondent_count = 0;
         quizs[id].respondent_limit = _respondent_limit;
         users[msg.sender].create_quiz_count += 1;
+        quizs[id].status = 0; // クイズ作成時にステータスを「未開始」に設定
         emit Create_quiz(msg.sender, id);
         return id;
     }
@@ -302,6 +268,50 @@ contract Quiz_Dapp is class_room {
         respondent_limit = quizs[_quiz_id].respondent_limit;
     }
 
+    function get_quiz_list(uint start, uint end, uint statusFilter)
+        public
+        view
+        returns (QuizSummary[] memory filteredQuizzes)
+    {
+        require(start <= end, "Invalid range");
+    
+        uint count = end - start;
+        QuizSummary[] memory allQuizzes = new QuizSummary[](count);
+        uint filteredCount = 0;
+
+        for (uint i = start; i < end; i++) {
+            Quiz storage quiz = quizs[i];
+        
+            // ステータスフィルタの適用
+            if (statusFilter == 0 || (statusFilter != 0 && quiz.status == statusFilter)) {
+                allQuizzes[filteredCount] = QuizSummary({
+                    quiz_id: quiz.quiz_id,
+                    owner: quiz.owner,
+                    title: quiz.title,
+                    explanation: quiz.explanation,
+                    thumbnail_url: quiz.thumbnail_url,
+                    content: quiz.content,
+                    answer_type: quiz.answer_type,
+                    create_time_epoch: quiz.create_time_epoch,
+                    start_time_epoch: quiz.start_time_epoch,
+                    time_limit_epoch: quiz.time_limit_epoch,
+                    reward: quiz.reward,
+                    respondent_count: quiz.respondent_count,
+                    respondent_limit: quiz.respondent_limit,
+                    status: quiz.status
+                });
+                filteredCount++;
+            }
+        }
+
+        QuizSummary[] memory result = new QuizSummary[](filteredCount);
+        for (uint i = 0; i < filteredCount; i++) {
+            result[i] = allQuizzes[i];
+        }
+
+        return result;
+    }
+
     function get_confirm_answer(uint _quiz_id) public view returns(string memory confirm_answer, bool is_payment){
         confirm_answer = quizs[_quiz_id].confirm_answer;
         is_payment = quizs[_quiz_id].is_payment;
@@ -372,6 +382,11 @@ contract Quiz_Dapp is class_room {
         }
         
         emit Save_answer(msg.sender, _quiz_id, _quiz_state);
+
+        // クイズの状態を「回答済み」に更新
+        if(quizs[_quiz_id].respondents_map[msg.sender] == 0){
+            quizs[_quiz_id].respondents_map[msg.sender] = 3;
+        }
     }
 
     event Payment_of_reward(uint indexed _quiz_id);
